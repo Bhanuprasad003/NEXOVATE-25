@@ -1,7 +1,7 @@
 // Constants
 const GOOGLE_SAFE_BROWSING_API_URL = 'https://safebrowsing.googleapis.com/v4/threatMatches:find';
 const WARNING_MODAL_ID = 'quickphish-warning-modal';
-const API_KEY = 'AIzaSyA2in_859ALxHRK-kfehFEKROyhX4S_IG0'; // Replace with your actual API key
+const API_KEY = ''; // Replace with your actual API key
 
 // Debug logging
 function debugLog(message, data = null) {
