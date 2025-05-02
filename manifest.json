@@ -2,17 +2,13 @@
   "manifest_version": 3,
   "name": "QuickPhish",
   "version": "1.0",
-  "description": "Instant phishing link detection for Gmail and Outlook webmail",
+  "description": "Instant phishing link detection for Gmail, Outlook, and any website",
   "permissions": [
-    "activeTab",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "host_permissions": [
-    "*://*.gmail.com/*",
-    "*://*.outlook.com/*",
-    "*://*.office365.com/*",
-    "https://checkurl.phishtank.com/*",
-    "file:///*"
+    "<all_urls>"
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
@@ -26,20 +22,7 @@
   "icons": {
     "128": "icons/icon.svg"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "*://*.gmail.com/*",
-        "*://*.outlook.com/*",
-        "*://*.office365.com/*",
-        "file:///*"
-      ],
-      "js": ["content.js"],
-      "css": ["styles.css"],
-      "run_at": "document_end"
-    }
-  ],
   "background": {
     "service_worker": "background.js"
   }
-} 
+}
