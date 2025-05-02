@@ -1,6 +1,7 @@
 // Constants
-const PHISHTANK_API_URL = 'https://checkurl.phishtank.com/checkurl/';
+const GOOGLE_SAFE_BROWSING_API_URL = 'https://safebrowsing.googleapis.com/v4/threatMatches:find';
 const WARNING_MODAL_ID = 'quickphish-warning-modal';
+const API_KEY = 'AIzaSyA2in_859ALxHRK-kfehFEKROyhX4S_IG0'; // Replace with your actual API key
 
 // Debug logging
 function debugLog(message, data = null) {
@@ -59,24 +60,30 @@ function showWarningModal(url) {
     };
 }
 
-// Check URL against PhishTank API
+// Check URL against Google Safe Browsing API
 async function checkPhishingUrl(url) {
     try {
-        debugLog('Checking URL with PhishTank:', url);
+        debugLog('Checking URL with Google Safe Browsing:', url);
         
-        // For testing purposes, let's simulate a phishing detection
-        // Remove this in production
-        if (url.includes('paypal') || url.includes('banking') || url.includes('microsoft')) {
-            debugLog('Test URL detected as phishing:', url);
-            return true;
-        }
-        
-        const response = await fetch(PHISHTANK_API_URL, {
+        const requestBody = {
+            client: {
+                clientId: "quickphish-extension",
+                clientVersion: "1.0.0"
+            },
+            threatInfo: {
+                threatTypes: ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
+                platformTypes: ["ANY_PLATFORM"],
+                threatEntryTypes: ["URL"],
+                threatEntries: [{ url: url }]
+            }
+        };
+
+        const response = await fetch(`${GOOGLE_SAFE_BROWSING_API_URL}?key=${API_KEY}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: `url=${encodeURIComponent(url)}`
+            body: JSON.stringify(requestBody)
         });
         
         if (!response.ok) {
@@ -84,18 +91,18 @@ async function checkPhishingUrl(url) {
         }
         
         const data = await response.json();
-        debugLog('PhishTank API response:', data);
+        debugLog('Google Safe Browsing API response:', data);
         
-        // Check if the URL is in the database
-        if (data.in_database) {
-            debugLog('URL flagged as phishing:', url);
+        // If there are matches, the URL is considered unsafe
+        if (data.matches && data.matches.length > 0) {
+            debugLog('URL flagged as unsafe:', url);
             return true;
         }
         
         debugLog('URL appears safe:', url);
         return false;
     } catch (error) {
-        debugLog('Error checking phishing URL:', error);
+        debugLog('Error checking URL with Google Safe Browsing:', error);
         return false;
     }
 }
