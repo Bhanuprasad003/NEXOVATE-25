@@ -1,0 +1,79 @@
+#quickphish-warning-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999999;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.quickphish-modal-content {
+    position: relative;
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.quickphish-modal-content h2 {
+    color: #d32f2f;
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.quickphish-modal-content p {
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.quickphish-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.quickphish-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+#quickphish-proceed {
+    background-color: #f44336;
+    color: white;
+}
+
+#quickphish-proceed:hover {
+    background-color: #d32f2f;
+}
+
+#quickphish-cancel {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+#quickphish-cancel:hover {
+    background-color: #bdbdbd;
+} 
