@@ -18,17 +18,19 @@ function debugLog(message, data = null) {
 
 // Create and inject warning modal
 function createWarningModal() {
-    if (document.getElementById(WARNING_MODAL_ID)) {        
+    if (document.getElementById(WARNING_MODAL_ID)) {
         debugLog('Warning modal already exists');
         return;
     }
-    
+
     debugLog('Creating warning modal');
+
     const modal = document.createElement('div');
     modal.id = WARNING_MODAL_ID;
     modal.innerHTML = `
         <div class="quickphish-modal-content">
-            <h2>⚠️ Potential Phishing Link Detected</h2>
+            <div class="quickphish-icon">⚠️</div>
+            <h2>Potential Phishing Link Detected</h2>
             <p>The link you're about to visit has been flagged as potentially malicious.</p>
             <div class="quickphish-buttons">
                 <button id="quickphish-proceed">Proceed Anyway</button>
@@ -39,6 +41,7 @@ function createWarningModal() {
     document.body.appendChild(modal);
     debugLog('Warning modal created and injected');
 }
+
 
 // Show warning modal
 function showWarningModal(url) {
