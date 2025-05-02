@@ -42,7 +42,6 @@ function createWarningModal() {
     debugLog('Warning modal created and injected');
 }
 
-
 // Show warning modal
 function showWarningModal(url) {
     debugLog('Showing warning modal for URL:', url);
@@ -53,7 +52,6 @@ function showWarningModal(url) {
     }
     modal.style.display = 'block';
     
-    // Add event listeners to buttons
     document.getElementById('quickphish-proceed').onclick = () => {
         debugLog('User chose to proceed to URL:', url);
         modal.style.display = 'none';
@@ -77,31 +75,48 @@ async function checkSSLCertificate(url) {
     }
 }
 
-// Check URL patterns
+// Check URL patterns with improved accuracy
 function checkSuspiciousPatterns(url) {
-    const suspiciousPatterns = [
-        /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/, // Only exact IP address matches
-        /[^a-zA-Z0-9\-\.\/\?\=\&]/, // Allow common URL characters
-        /(?:login|signin|account|secure|verify|confirm|update|password|bank|paypal|amazon|ebay|apple|google|microsoft)(?:[^a-zA-Z0-9]|$)/i, // More precise keyword matching
-        /[a-zA-Z0-9-]+\.(tk|ml|ga|cf|gq)(?:[^a-zA-Z0-9]|$)/, // Free domain TLDs with boundary check
-    ];
+    try {
+        const urlObj = new URL(url);
+        const domain = urlObj.hostname;
+        
+        // List of trusted domains
+        const trustedDomains = [
+            'google.com', 'facebook.com', 'amazon.com', 'microsoft.com', 'apple.com',
+            'github.com', 'linkedin.com', 'twitter.com', 'instagram.com', 'youtube.com',
+            'netflix.com', 'spotify.com', 'paypal.com', 'ebay.com', 'wikipedia.org',
+            'gmail.com', 'outlook.com', 'yahoo.com', 'hotmail.com', 'protonmail.com'
+        ];
 
-    // Don't flag if it's a well-known domain
-    const trustedDomains = [
-        'google.com', 'facebook.com', 'amazon.com', 'microsoft.com', 'apple.com',
-        'github.com', 'linkedin.com', 'twitter.com', 'instagram.com', 'youtube.com',
-        'netflix.com', 'spotify.com', 'paypal.com', 'ebay.com', 'wikipedia.org'
-    ];
+        // Check if domain is trusted
+        if (trustedDomains.some(trusted => domain.endsWith(trusted))) {
+            return false;
+        }
 
-    const urlObj = new URL(url);
-    const domain = urlObj.hostname;
+        // More precise suspicious patterns
+        const suspiciousPatterns = [
+            // IP address without domain
+            /^https?:\/\/(\d{1,3}\.){3}\d{1,3}(:\d+)?(\/.*)?$/,
+            // Suspicious subdomains
+            /(?:login|signin|account|secure|verify|confirm|update|password|bank|paypal|amazon|ebay|apple|google|microsoft)\.(?!com|org|net|edu|gov)[a-zA-Z]{2,}$/i,
+            // Free domain TLDs
+            /\.(tk|ml|ga|cf|gq|xyz|club|top|site|online|tech|website|space|site|pw|icu|cyou|buzz|click|link|live|stream|gdn|life|live|men|pro|red|rip|rocks|run|sale|services|site|space|store|studio|support|systems|team|today|top|trade|video|website|win|work|xyz)$/i
+        ];
 
-    // If it's a trusted domain, skip pattern checking
-    if (trustedDomains.some(trusted => domain.endsWith(trusted))) {
+        // Check for suspicious patterns
+        const hasSuspiciousPattern = suspiciousPatterns.some(pattern => pattern.test(url));
+        
+        if (hasSuspiciousPattern) {
+            debugLog('URL has suspicious pattern:', url);
+            return true;
+        }
+
+        return false;
+    } catch (error) {
+        debugLog('Error checking URL patterns:', error);
         return false;
     }
-
-    return suspiciousPatterns.some(pattern => pattern.test(url));
 }
 
 // Check domain reputation using VirusTotal
@@ -157,59 +172,19 @@ async function checkURLhaus(url) {
 // Enhanced URL checking
 async function checkPhishingUrl(url) {
     try {
-        debugLog('Starting comprehensive URL check:', url);
+        debugLog('Starting URL check:', url);
         
-        // Run all checks in parallel
-        const [isGoogleSafe, isSSLSafe, hasSuspiciousPatterns, isDomainMalicious, isURLhausMalicious] = await Promise.all([
-            checkGoogleSafeBrowsing(url),
-            checkSSLCertificate(url),
-            Promise.resolve(checkSuspiciousPatterns(url)),
-            checkDomainReputation(url),
-            checkURLhaus(url)
-        ]);
-
-        // Log results
-        debugLog('Security check results:', {
-            isGoogleSafe,
-            isSSLSafe,
-            hasSuspiciousPatterns,
-            isDomainMalicious,
-            isURLhausMalicious
-        });
-
-        // More nuanced decision making
-        if (!isGoogleSafe) {
-            debugLog('URL flagged by Google Safe Browsing');
-            return true;
-        }
-
-        if (isDomainMalicious) {
-            debugLog('URL flagged by VirusTotal');
-            return true;
-        }
-
-        if (isURLhausMalicious) {
-            debugLog('URL flagged by URLhaus');
-            return true;
-        }
-
-        // Only consider SSL and patterns if other checks pass
-        if (!isSSLSafe && hasSuspiciousPatterns) {
-            debugLog('URL has both SSL and pattern issues');
-            return true;
-        }
-
-        // If only one of SSL or patterns is an issue, log but don't block
-        if (!isSSLSafe) {
-            debugLog('Warning: URL has SSL issues but proceeding');
-        }
+        // First check for suspicious patterns
+        const hasSuspiciousPatterns = checkSuspiciousPatterns(url);
+        
         if (hasSuspiciousPatterns) {
-            debugLog('Warning: URL has suspicious patterns but proceeding');
+            debugLog('URL flagged due to suspicious patterns');
+            return true;
         }
 
         return false;
     } catch (error) {
-        debugLog('Error in comprehensive URL check:', error);
+        debugLog('Error in URL check:', error);
         return false;
     }
 }
@@ -255,77 +230,36 @@ async function checkGoogleSafeBrowsing(url) {
 }
 
 // Handle link clicks
-async function handleLinkClick(event) {
-    debugLog('Link click detected');
-    
-    // Check if the click is from a link
+function handleLinkClick(event) {
     const link = event.target.closest('a');
-    if (!link) {
-        debugLog('Click was not on a link');
-        return;
-    }
+    if (!link) return;
 
-    // Get the URL and validate it
     const url = link.href;
-    if (!url || url.startsWith('javascript:') || url.startsWith('mailto:')) {
-        debugLog('Ignoring special link:', url);
+    if (!url) return;
+
+    // Don't check internal links
+    if (url.startsWith(window.location.origin)) {
         return;
     }
 
-    debugLog('Processing link:', url);
-
-    // Prevent default navigation
-    event.preventDefault();
-    event.stopPropagation();
-
-    try {
-        debugLog('Processing link click:', url);
-        
-        // Check if URL is phishing
-        const isPhishing = await checkPhishingUrl(url);
-        
+    // Check if URL is suspicious
+    checkPhishingUrl(url).then(isPhishing => {
         if (isPhishing) {
-            debugLog('Showing warning modal for phishing URL:', url);
+            event.preventDefault();
             showWarningModal(url);
-        } else {
-            debugLog('Proceeding to safe URL:', url);
-            window.location.href = url;
         }
-    } catch (error) {
-        debugLog('Error in handleLinkClick:', error);
-        // If there's an error, allow the link to work normally
-        window.location.href = url;
-    }
+    });
 }
 
-// Initialize
+// Initialize the extension
 function initialize() {
-    debugLog('QuickPhish extension initializing...');
-    
-    // Wait for the page to be fully loaded
-    if (document.readyState === 'loading') {
-        debugLog('Document still loading, waiting for DOMContentLoaded');
-        document.addEventListener('DOMContentLoaded', setupEventListeners);
-    } else {
-        debugLog('Document already loaded, setting up listeners immediately');
-        setupEventListeners();
-    }
+    debugLog('Initializing QuickPhish extension');
+    setupEventListeners();
 }
 
-// Setup event listeners
+// Set up event listeners
 function setupEventListeners() {
-    debugLog('Setting up event listeners...');
-    
-    // Remove any existing listeners to prevent duplicates
-    document.removeEventListener('click', handleLinkClick, true);
-    
-    // Add click event listener to document
     document.addEventListener('click', handleLinkClick, true);
-    
-    // Create warning modal
-    createWarningModal();
-    
-    debugLog('QuickPhish extension initialized successfully');
 }
 
 // Start the extension
