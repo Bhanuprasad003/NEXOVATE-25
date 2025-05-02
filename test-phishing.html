@@ -1,127 +1,204 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>QuickPhish Test Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background: #f2f5f9;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
         }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.4rem;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
         .link-group {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 25px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
         }
-        h2 {
+
+        .link-group h2 {
+            font-size: 1.5rem;
             color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
         .link-list {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
+
         .link-list li {
-            margin: 10px 0;
-            padding: 10px;
-            background: #f5f5f5; 
-            border-radius: 4px;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            transition: all 0.2s ease-in-out;
         }
+
+        .link-list li:hover {
+            background-color: #eef5ff;
+            border-color: #c2dbff;
+        }
+
         .link-list a {
-            color: #0066cc;
+            color: #0077cc;
             text-decoration: none;
+            font-weight: 500;
         }
+
         .link-list a:hover {
             text-decoration: underline;
         }
+
         .description {
-            color: #666;
-            font-size: 0.9em;
+            font-size: 0.85rem;
+            color: #777;
             margin-top: 5px;
         }
-        .note {
-            background-color: #fff3cd;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 10px 0;
+
+        ol {
+            padding-left: 20px;
+            color: #555;
+        }
+
+        ol li {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .link-group i {
+            color: #0077cc;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .link-group {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>QuickPhish Test Page</h1>
-    <p>This page contains various types of links to test the QuickPhish extension's phishing detection capabilities.</p>
+    <div class="container">
+        <h1><i class="fas fa-shield-alt"></i> QuickPhish Test Page</h1>
+        <p>This page contains various types of links to test the QuickPhish extension's phishing detection capabilities.</p>
 
-    <div class="note">
-        <strong>Note:</strong> These are real phishing URLs from PhishTank's database. The extension should detect them and show a warning modal.
-    </div>
+        <div class="note">
+            <strong>Note:</strong> These are real phishing URLs from PhishTank's database. The extension should detect them and show a warning modal.
+        </div>
 
-    <div class="link-group">
-        <h2>Known Safe Links</h2>
-        <ul class="link-list">
-            <li>
-                <a href="https://www.google.com">Google</a>
-                <div class="description">A well-known safe website</div>
-            </li>
-            <li>
-                <a href="https://www.github.com">GitHub</a>
-                <div class="description">A trusted development platform</div>
-            </li>
-        </ul>
-    </div>
+        <div class="link-group">
+            <h2><i class="fas fa-check-circle"></i> Known Safe Links</h2>
+            <ul class="link-list">
+                <li>
+                    <a href="https://www.google.com">Google</a>
+                    <div class="description">A well-known safe website</div>
+                </li>
+                <li>
+                    <a href="https://www.github.com">GitHub</a>
+                    <div class="description">A trusted development platform</div>
+                </li>
+            </ul>
+        </div>
 
-    <div class="link-group">
-        <h2>Known Phishing Links (From PhishTank Database)</h2>
-        <ul class="link-list">
-            <li>
-                <a href="http://paypal.com-secure-verify.com">PayPal Phishing Example</a>
-                <div class="description">A known phishing domain targeting PayPal users</div>
-            </li>
-            <li>
-                <a href="http://secure-banking-verify.com">Bank Security Check</a>
-                <div class="description">A known phishing domain targeting banking users</div>
-            </li>
-            <li>
-                <a href="http://microsoft-verify-account.com">Microsoft Account Verification</a>
-                <div class="description">A known phishing domain targeting Microsoft users</div>
-            </li>
-        </ul>
-    </div>
+        <div class="link-group">
+            <h2><i class="fas fa-exclamation-triangle"></i> Known Phishing Links</h2>
+            <ul class="link-list">
+                <li>
+                    <a href="http://paypal.com-secure-verify.com">PayPal Phishing Example</a>
+                    <div class="description">A known phishing domain targeting PayPal users</div>
+                </li>
+                <li>
+                    <a href="http://secure-banking-verify.com">Bank Security Check</a>
+                    <div class="description">A known phishing domain targeting banking users</div>
+                </li>
+                <li>
+                    <a href="http://microsoft-verify-account.com">Microsoft Account Verification</a>
+                    <div class="description">A known phishing domain targeting Microsoft users</div>
+                </li>
+            </ul>
+        </div>
 
-    <div class="link-group">
-        <h2>Special Links</h2>
-        <ul class="link-list">
-            <li>
-                <a href="mailto:test@example.com">Email Link</a>
-                <div class="description">A mailto: link (should be ignored by the extension)</div>
-            </li>
-            <li>
-                <a href="javascript:alert('test')">JavaScript Link</a>
-                <div class="description">A javascript: link (should be ignored by the extension)</div>
-            </li>
-        </ul>
-    </div>
+        <div class="link-group">
+            <h2><i class="fas fa-code"></i> Special Links</h2>
+            <ul class="link-list">
+                <li>
+                    <a href="mailto:test@example.com">Email Link</a>
+                    <div class="description">A mailto: link (should be ignored by the extension)</div>
+                </li>
+                <li>
+                    <a href="javascript:alert('test')">JavaScript Link</a>
+                    <div class="description">A javascript: link (should be ignored by the extension)</div>
+                </li>
+            </ul>
+        </div>
 
-    <div class="link-group">
-        <h2>How to Test</h2>
-        <ol>
-            <li>Make sure the QuickPhish extension is installed and enabled</li>
-            <li>Open Chrome DevTools (F12) and go to the Console tab</li>
-            <li>Click on each link in the test groups</li>
-            <li>Watch the console for API responses and detection logs</li>
-            <li>For safe links, you should be redirected normally</li>
-            <li>For phishing links, you should see the warning modal</li>
-            <li>For special links (mailto:, javascript:), they should work normally</li>
-        </ol>
-    </div>
+        <div class="link-group">
+            <h2><i class="fas fa-list-ol"></i> How to Test</h2>
+            <ol>
+                <li>Make sure the QuickPhish extension is installed and enabled</li>
+                <li>Open Chrome DevTools (F12) and go to the Console tab</li>
+                <li>Click on each link in the test groups</li>
+                <li>Watch the console for API responses and detection logs</li>
+                <li>For safe links, you should be redirected normally</li>
+                <li>For phishing links, you should see the warning modal</li>
+                <li>For special links (mailto:, javascript:), they should work normally</li>
+            </ol>
+        </div>
 
-    <div class="note">
-        <strong>Debugging Tips:</strong>
-        <ul>
-            <li>If you don't see the warning modal, check the console for any errors</li>
-            <li>Make sure the extension is properly loaded in chrome://extensions/</li>
-            <li>Verify that the content script is running by looking for initialization logs in the console</li>
-        </ul>
+        <div class="note">
+            <strong>Debugging Tips:</strong>
+            <ul>
+                <li>If you don't see the warning modal, check the console for any errors</li>
+                <li>Make sure the extension is properly loaded in <code>chrome://extensions/</code></li>
+                <li>Verify that the content script is running by looking for initialization logs in the console</li>
+            </ul>
+        </div>
     </div>
 </body>
-</html> 
+</html>
