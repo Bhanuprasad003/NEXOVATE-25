@@ -1,7 +1,10 @@
 // Constants
 const GOOGLE_SAFE_BROWSING_API_URL = 'https://safebrowsing.googleapis.com/v4/threatMatches:find';
+const VIRUSTOTAL_API_URL = 'https://www.virustotal.com/vtapi/v2/url/report';
+const URLHAUS_API_URL = 'https://urlhaus-api.abuse.ch/v1/';
 const WARNING_MODAL_ID = 'quickphish-warning-modal';
-const API_KEY = ''; // Replace with your actual API key
+const API_KEY = 'AIzaSyA2in_859ALxHRK-kfehFEKROyhX4S_IG0'; // Replace with your actual API key
+const VIRUSTOTAL_API_KEY = 'e033325a9e93d94929fc7beed48d3850335b20613ad723b2250f1abea5d915c3'; // Replace with your VirusTotal API key
 
 // Debug logging
 function debugLog(message, data = null) {
@@ -15,7 +18,7 @@ function debugLog(message, data = null) {
 
 // Create and inject warning modal
 function createWarningModal() {
-    if (document.getElementById(WARNING_MODAL_ID)) {
+    if (document.getElementById(WARNING_MODAL_ID)) {        
         debugLog('Warning modal already exists');
         return;
     }
@@ -60,8 +63,156 @@ function showWarningModal(url) {
     };
 }
 
-// Check URL against Google Safe Browsing API
+// Check SSL certificate
+async function checkSSLCertificate(url) {
+    try {
+        const response = await fetch(url, { method: 'HEAD' });
+        return response.ok;
+    } catch (error) {
+        debugLog('SSL certificate check failed:', error);
+        return false;
+    }
+}
+
+// Check URL patterns
+function checkSuspiciousPatterns(url) {
+    const suspiciousPatterns = [
+        /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/, // Only exact IP address matches
+        /[^a-zA-Z0-9\-\.\/\?\=\&]/, // Allow common URL characters
+        /(?:login|signin|account|secure|verify|confirm|update|password|bank|paypal|amazon|ebay|apple|google|microsoft)(?:[^a-zA-Z0-9]|$)/i, // More precise keyword matching
+        /[a-zA-Z0-9-]+\.(tk|ml|ga|cf|gq)(?:[^a-zA-Z0-9]|$)/, // Free domain TLDs with boundary check
+    ];
+
+    // Don't flag if it's a well-known domain
+    const trustedDomains = [
+        'google.com', 'facebook.com', 'amazon.com', 'microsoft.com', 'apple.com',
+        'github.com', 'linkedin.com', 'twitter.com', 'instagram.com', 'youtube.com',
+        'netflix.com', 'spotify.com', 'paypal.com', 'ebay.com', 'wikipedia.org'
+    ];
+
+    const urlObj = new URL(url);
+    const domain = urlObj.hostname;
+
+    // If it's a trusted domain, skip pattern checking
+    if (trustedDomains.some(trusted => domain.endsWith(trusted))) {
+        return false;
+    }
+
+    return suspiciousPatterns.some(pattern => pattern.test(url));
+}
+
+// Check domain reputation using VirusTotal
+async function checkDomainReputation(url) {
+    try {
+        const response = await fetch(`${VIRUSTOTAL_API_URL}?apikey=${VIRUSTOTAL_API_KEY}&resource=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        
+        if (data.positives > 0) {
+            debugLog('Domain flagged by VirusTotal:', data);
+            return true;
+        }
+        return false;
+    } catch (error) {
+        debugLog('Error checking domain reputation:', error);
+        return false;
+    }
+}
+
+// Check URL against URLhaus
+async function checkURLhaus(url) {
+    try {
+        debugLog('Checking URL with URLhaus:', url);
+        
+        const response = await fetch(URLHAUS_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `url=${encodeURIComponent(url)}`
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        debugLog('URLhaus API response:', data);
+
+        // URLhaus returns query_status and query_result
+        if (data.query_status === 'ok' && data.query_result === 'online') {
+            debugLog('URL flagged by URLhaus as malicious');
+            return true;
+        }
+
+        return false;
+    } catch (error) {
+        debugLog('Error checking URL with URLhaus:', error);
+        return false;
+    }
+}
+
+// Enhanced URL checking
 async function checkPhishingUrl(url) {
+    try {
+        debugLog('Starting comprehensive URL check:', url);
+        
+        // Run all checks in parallel
+        const [isGoogleSafe, isSSLSafe, hasSuspiciousPatterns, isDomainMalicious, isURLhausMalicious] = await Promise.all([
+            checkGoogleSafeBrowsing(url),
+            checkSSLCertificate(url),
+            Promise.resolve(checkSuspiciousPatterns(url)),
+            checkDomainReputation(url),
+            checkURLhaus(url)
+        ]);
+
+        // Log results
+        debugLog('Security check results:', {
+            isGoogleSafe,
+            isSSLSafe,
+            hasSuspiciousPatterns,
+            isDomainMalicious,
+            isURLhausMalicious
+        });
+
+        // More nuanced decision making
+        if (!isGoogleSafe) {
+            debugLog('URL flagged by Google Safe Browsing');
+            return true;
+        }
+
+        if (isDomainMalicious) {
+            debugLog('URL flagged by VirusTotal');
+            return true;
+        }
+
+        if (isURLhausMalicious) {
+            debugLog('URL flagged by URLhaus');
+            return true;
+        }
+
+        // Only consider SSL and patterns if other checks pass
+        if (!isSSLSafe && hasSuspiciousPatterns) {
+            debugLog('URL has both SSL and pattern issues');
+            return true;
+        }
+
+        // If only one of SSL or patterns is an issue, log but don't block
+        if (!isSSLSafe) {
+            debugLog('Warning: URL has SSL issues but proceeding');
+        }
+        if (hasSuspiciousPatterns) {
+            debugLog('Warning: URL has suspicious patterns but proceeding');
+        }
+
+        return false;
+    } catch (error) {
+        debugLog('Error in comprehensive URL check:', error);
+        return false;
+    }
+}
+
+// Original Google Safe Browsing check (renamed)
+async function checkGoogleSafeBrowsing(url) {
     try {
         debugLog('Checking URL with Google Safe Browsing:', url);
         
@@ -93,14 +244,7 @@ async function checkPhishingUrl(url) {
         const data = await response.json();
         debugLog('Google Safe Browsing API response:', data);
         
-        // If there are matches, the URL is considered unsafe
-        if (data.matches && data.matches.length > 0) {
-            debugLog('URL flagged as unsafe:', url);
-            return true;
-        }
-        
-        debugLog('URL appears safe:', url);
-        return false;
+        return !(data.matches && data.matches.length > 0);
     } catch (error) {
         debugLog('Error checking URL with Google Safe Browsing:', error);
         return false;
