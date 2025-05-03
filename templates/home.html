@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishBlade - Phishing Link Detection</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('download') }}">Download</a>
+        </div>
+        <button class="chatbot-btn">
+            <a href="{{ url_for('chatbot_page') }}" style="text-decoration: none; color: inherit;">
+                <i class='bx bxs-chat'></i> ChatBot
+            </a>
+        </button>
+    </nav>
+
+    <section class="hero">
+        <div class="content">
+            <h1 class="website-name">PhishBlade</h1>
+            <h2 class="hero-headline">Stay Sharp. Stay Safe.</h2>
+            <p class="hero-subheadline">PhishBlade slices through fake links with pixel-perfect precision. Your first line of defense against phishing attacks.</p>
+            <div class="cta-buttons">
+                <a href="/download" class="cta-btn primary">🔗 Download Extension</a>
+                <button class="cta-btn secondary"><a href="{{ url_for('chatbot_page') }}" style="text-decoration: none; color: inherit;">💬 Talk to Bot</a></button>
+                <a href="/how-it-works" class="cta-btn outline">💻 How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <h2 class="section-title">How PhishBlade Protects You</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🕵️‍♂️</span>
+                <h3>Real-Time Link Scanning</h3>
+                <p>Instantly detects malicious URLs before you click.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⚔️</span>
+                <h3>AI-Powered Detection</h3>
+                <p>Adaptive models catch even the sneakiest scams.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🧱</span>
+                <h3>Safe Browsing Mode</h3>
+                <p>Auto-blocks suspicious pages, keeping you protected.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🧠</span>
+                <h3>Educate While You Surf</h3>
+                <p>Learn about threats on-the-fly through our chatbot.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-phishblade">
+        <h2 class="section-title">Retro Looks. Cutting-Edge Protection.</h2>
+        <p class="section-description">In a world of cyber chaos, PhishBlade combines nostalgic vibes with next-gen defense. With pixel art visuals and futuristic tech under the hood, we're redefining safe browsing.</p>
+    </section>
+
+    <section class="features-highlight">
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🧩</span>
+                <h3>Browser Extension</h3>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔒</span>
+                <h3>Secure Database</h3>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🧠</span>
+                <h3>Machine Learning Engine</h3>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🎮</span>
+                <h3>Retro UI</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial">
+        <blockquote>
+            "PhishBlade saved my crypto wallet from a phishing link. 10/10 would slice again."
+            <cite>– NeonKnight</cite>
+        </blockquote>
+    </section>
+
+    <footer class="cta-footer">
+        <h2>Ready to Power Up Your Protection?</h2>
+        <p>Download PhishBlade and outsmart the scammers.</p>
+        <button class="cta-btn primary large"><a href="{{ url_for('download') }}" style="text-decoration: none; color: inherit;">🔥 Download Now</a></button>
+    </footer>
+</body>
+</html> 

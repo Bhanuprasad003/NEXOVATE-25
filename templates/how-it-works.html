@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How PhishBlade Works - Phishing Link Detection</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body style="background: rgba(0, 0, 0, 1);">
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('download') }}">Download</a>
+        </div>
+        <button class="chatbot-btn">
+            <a href="{{ url_for('chatbot_page') }}" style="text-decoration: none; color: inherit;">
+                <i class='bx bxs-chat'></i> ChatBot
+            </a>
+        </button>
+    </nav>
+
+    <section class="hero" style="background: rgba(0, 0, 0, 1);">
+        <div class="content">
+            <h1 class="website-name">How It Works</h1>
+            <h2 class="hero-headline">Your Clicks Are Sharp. So Is Our Blade.</h2>
+            <p class="hero-subheadline">Discover how PhishBlade's advanced technology keeps you safe from malicious links.</p>
+        </div>
+    </section>
+
+    <section class="process-section">
+        <div class="process-grid">
+            <div class="process-card">
+                <span class="process-icon">🔗</span>
+                <h3>1. Link Intercept</h3>
+                <p>As soon as you click or hover over a link, PhishBlade's extension slices in — intercepting the link and preparing it for inspection.</p>
+                <div class="visual-idea">
+                    <p>A pixelated katana slicing through a corrupted link.</p>
+                </div>
+            </div>
+
+            <div class="process-card">
+                <span class="process-icon">🧠</span>
+                <h3>2. AI & Heuristics Scan</h3>
+                <p>The link is then sent to our cloud-based API. It analyzes domain reputation, URL patterns, redirection chains, SSL certificates, and threat intelligence.</p>
+                <div class="visual-idea">
+                    <p>Neon holograms scanning a URL grid with animations or glows.</p>
+                </div>
+            </div>
+
+            <div class="process-card">
+                <span class="process-icon">⚠️</span>
+                <h3>3. Threat Classification</h3>
+                <p>Using machine learning models trained on thousands of phishing attempts, PhishBlade classifies the link as Safe, Suspicious, or Malicious.</p>
+                <div class="visual-idea">
+                    <p>A retro-styled interface with a terminal window showing the decision logic.</p>
+                </div>
+            </div>
+
+            <div class="process-card">
+                <span class="process-icon">🛡️</span>
+                <h3>4. User Protection & Alerts</h3>
+                <p>Based on the result: Malicious links are blocked instantly, suspicious links get a warning popup, and safe links pass through seamlessly.</p>
+                <div class="visual-idea">
+                    <p>A pixel art shield with red/green/yellow indicators.</p>
+                </div>
+            </div>
+
+            <div class="process-card">
+                <span class="process-icon">📚</span>
+                <h3>5. Learn As You Click</h3>
+                <p>Want to know why it was dangerous? Ask BladeBot, our interactive AI that teaches you about the threat in real-time.</p>
+                <div class="visual-idea">
+                    <p>A chat bubble with a retro AI avatar spitting cool infosec facts.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-highlight">
+        <h2 class="section-title">Why Choose PhishBlade?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🟢</span>
+                <h3>Fast</h3>
+                <p>Instant protection with minimal impact on browsing speed</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔵</span>
+                <h3>Smart</h3>
+                <p>Advanced AI that learns and adapts to new threats</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔴</span>
+                <h3>Stylish</h3>
+                <p>Retro cyber aesthetic that makes security cool</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="cta-footer">
+        <h2>Ready to Get Protected?</h2>
+        <p>Download PhishBlade and browse with confidence.</p>
+        <a href="{{ url_for('download') }}" class="cta-btn primary large">🔥 Download Now</a>
+    </footer>
+</body>
+</html> 
