@@ -29,7 +29,7 @@ function createWarningModal() {
     modal.innerHTML = `
         <div class="quickphish-modal-content">
             <h2>⚠️ Potential Phishing Link Detected</h2>
-            <p>The link you're about to visit has been flagged as potentially malicious.</p>
+            <p>The link you're about to visit has been flagged as potentially malicious. Proceed only if you're absolutely sure it's safe.</p>
             <div class="quickphish-buttons">
                 <button id="quickphish-proceed">Proceed Anyway</button>
                 <button id="quickphish-cancel">Cancel</button>
