@@ -4,7 +4,7 @@ const VIRUSTOTAL_API_URL = 'https://www.virustotal.com/vtapi/v2/url/report';
 const URLHAUS_API_URL = 'https://urlhaus-api.abuse.ch/v1/';
 const WARNING_MODAL_ID = 'quickphish-warning-modal';
 const API_KEY = 'AIzaSyCngttbVh6iytjtuEGMVLzO0md87PtLKCQ'; // Replace with your actual API key
-const VIRUSTOTAL_API_KEY = 'f942fa105f8cf2d0fc011a93c5f7f04bc90db7edb0159c112334c749dedfe02b'; // Replace with your VirusTotal API key
+const VIRUSTOTAL_API_KEY = 'f942fa105f8cf2d0fc011a93c5f7f04bc90db7edb0159c112334c749dedfe02b'; 
 
 // Debug logging
 function debugLog(message, data = null) {
