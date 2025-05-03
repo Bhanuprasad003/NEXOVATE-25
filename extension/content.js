@@ -87,7 +87,14 @@ function checkSuspiciousPatterns(url) {
     const trustedDomains = [
         'google.com', 'facebook.com', 'amazon.com', 'microsoft.com', 'apple.com',
         'github.com', 'linkedin.com', 'twitter.com', 'instagram.com', 'youtube.com',
-        'netflix.com', 'spotify.com', 'paypal.com', 'ebay.com', 'wikipedia.org'
+        'netflix.com', 'spotify.com', 'paypal.com', 'ebay.com', 'wikipedia.org',
+        'reddit.com', 'stackoverflow.com', 'medium.com', 'quora.com', 'pinterest.com',
+        'tumblr.com', 'wordpress.com', 'blogspot.com', 'wix.com', 'squarespace.com',
+        'shopify.com', 'etsy.com', 'aliexpress.com', 'walmart.com', 'target.com',
+        'bestbuy.com', 'newegg.com', 'homedepot.com', 'lowes.com', 'costco.com',
+        'samsclub.com', 'kroger.com', 'safeway.com', 'wholefoods.com', 'traderjoes.com',
+        'cnn.com', 'bbc.com', 'nytimes.com', 'washingtonpost.com', 'wsj.com',
+        'forbes.com', 'bloomberg.com', 'reuters.com', 'theguardian.com', 'huffpost.com'
     ];
 
     const urlObj = new URL(url);
@@ -98,7 +105,9 @@ function checkSuspiciousPatterns(url) {
         return false;
     }
 
-    return suspiciousPatterns.some(pattern => pattern.test(url));
+    // Only flag if multiple suspicious patterns are found
+    const suspiciousCount = suspiciousPatterns.filter(pattern => pattern.test(url)).length;
+    return suspiciousCount >= 2; // Require at least 2 suspicious patterns to flag
 }
 
 // Check domain reputation using VirusTotal
