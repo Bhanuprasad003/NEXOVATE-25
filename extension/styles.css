@@ -1,0 +1,121 @@
+#quickphish-warning-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999999;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.quickphish-modal-content {
+    position: relative;
+    background-color: #fff;
+    margin: 12% auto;
+    padding: 30px 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.4s ease-out, borderFlash 1.2s ease-in-out infinite;
+    border: 3px solid #f44336;
+    text-align: center;
+}
+
+.quickphish-icon {
+    font-size: 3rem;
+    animation: pulse 1s infinite;
+    margin-bottom: 10px;
+}
+
+.quickphish-modal-content h2 {
+    color: #d32f2f;
+    margin-top: 0;
+    font-size: 1.75em;
+}
+
+.quickphish-modal-content p {
+    color: #444;
+    font-size: 1em;
+    margin: 20px 0;
+}
+
+.quickphish-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.quickphish-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95em;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#quickphish-proceed {
+    background-color: #e3362c;
+    color: white;
+}
+
+#quickphish-proceed:hover {
+    background-color: #c62828;
+    transform: scale(1.05);
+}
+
+#quickphish-cancel {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+#quickphish-cancel:hover {
+    background-color: #bdbdbd;
+    transform: scale(1.05);
+}
+#quickphish-warning-modal {
+    z-index: 2147483647;
+}
+
+
+/* Animations */
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes borderFlash {
+    0%, 100% {
+        border-color: #f44336;
+    }
+    50% {
+        border-color: #ff1744;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.75;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

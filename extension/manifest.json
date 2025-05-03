@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "QuickPhish",
+  "version": "1.0",
+  "description": "Instant phishing link detection for Gmail, Outlook, and any website",
+  "permissions": [
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icons/icon.svg"
+    }
+  },
+  "icons": {
+    "128": "icons/icon.svg"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
