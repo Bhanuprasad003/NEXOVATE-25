@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BladeBot - PhishBlade AI Assistant</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: 'Pixelify Sans', sans-serif;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url(https://i.redd.it/lhnvupvps4h91.gif);
+            background-color: grey;
+            /* background-position: center center; */
+            background-size: fill;
+            background-repeat: no-repeat;
+            /* position: relative; */
+            height: 100%;
+            /* background-position: center;
+            background-attachment: fixed; */
+
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 60px;
+            color: #f8e1e8;
+            z-index: 999;
+            position: relative;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: transparent;
+            border: 2px solid rgba(255, 255, 255, .2);
+            backdrop-filter: blur(2px);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .conversation {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 75%;
+        }
+
+        .user-message {
+            background-color: #f8e1e8;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .bot-message {
+            background-color: #c55059;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bomma {
+            width: 220px;
+            z-index: 30;
+            position: relative;
+            /* margin-left: 45%; */
+
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8e1e8;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #c55059;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .box {
+            height: 100%;
+            width: 100%;
+            opacity: 0.69;
+            position: absolute;
+            top: 0;
+            background-color: black;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        .nav{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('download') }}">Download</a>
+        </div>
+        <button class="chatbot-btn active">
+            <i class='bx bxs-chat'></i> ChatBot
+        </button>
+    </nav>
+
+    <section class="hero">
+        <div class="content">
+            <h1 class="website-name">BladeBot</h1>
+            <h2 class="hero-headline">Your AI Security Companion</h2>
+            <p class="hero-subheadline">Ask me anything about phishing, security, or how PhishBlade works.</p>
+        </div>
+    </section>
+
+    <section class="chatbot-section">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="bot-avatar">
+                    <i class='bx bxs-bot'></i>
+                </div>
+                <div class="bot-info">
+                    <h3>BladeBot</h3>
+                    <p>Online & Ready to Help</p>
+                </div>
+            </div>
+            
+            <div class="chat-messages">
+                <div class="message bot">
+                    <div class="message-content">
+                        <p>Hello! I'm BladeBot, your AI security assistant. How can I help you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" placeholder="Type your message here..." class="message-input">
+                <button class="send-btn">
+                    <i class='bx bxs-send'></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="chat-suggestions">
+            <h3>Quick Questions</h3>
+            <div class="suggestion-grid">
+                <button class="suggestion-btn">How does PhishBlade work?</button>
+                <button class="suggestion-btn">What is phishing?</button>
+                <button class="suggestion-btn">How to stay safe online?</button>
+                <button class="suggestion-btn">Tell me about your features</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="cta-footer">
+        <h2>Need More Help?</h2>
+        <p>Visit our FAQ section or contact our support team.</p>
+        <a href="{{ url_for('how_it_works') }}" class="cta-btn primary large">📚 Learn More</a>
+    </footer>
+
+    <script>
+        const chatMessages = document.querySelector('.chat-messages');
+        const messageInput = document.querySelector('.message-input');
+        const sendBtn = document.querySelector('.send-btn');
+        const suggestionBtns = document.querySelectorAll('.suggestion-btn');
+        
+        let chatHistory = [];
+        let isProcessing = false;
+
+        // Function to add a message to the chat
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            
+            const messageText = document.createElement('p');
+            messageText.textContent = content;
+            
+            messageContent.appendChild(messageText);
+            messageDiv.appendChild(messageContent);
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Function to show loading state
+        function showLoading() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message bot loading';
+            loadingDiv.innerHTML = '<div class="message-content"><p>Thinking...</p></div>';
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return loadingDiv;
+        }
+
+        // Function to remove loading state
+        function removeLoading(loadingDiv) {
+            loadingDiv.remove();
+        }
+
+        // Function to send message to server
+        async function sendMessage(message) {
+            if (isProcessing) return;
+            isProcessing = true;
+
+            // Add user message to chat
+            addMessage(message, true);
+            
+            // Show loading state
+            const loadingDiv = showLoading();
+            
+            try {
+                const response = await fetch('http://localhost:5000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        history: chatHistory
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    removeLoading(loadingDiv);
+                    addMessage(data.response);
+                    // Add to chat history
+                    chatHistory.push({
+                        user: message,
+                        bot: data.response
+                    });
+                } else {
+                    throw new Error(data.message || 'Failed to get response');
+                }
+            } catch (error) {
+                removeLoading(loadingDiv);
+                addMessage('Sorry, I encountered an error. Please try again later.');
+                console.error('Chat error:', error);
+            } finally {
+                isProcessing = false;
+            }
+        }
+
+        // Event listeners
+        sendBtn.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                sendMessage(message);
+                messageInput.value = '';
+            }
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const message = messageInput.value.trim();
+                if (message) {
+                    sendMessage(message);
+                    messageInput.value = '';
+                }
+            }
+        });
+
+        // Add click handlers for suggestion buttons
+        suggestionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const message = btn.textContent;
+                sendMessage(message);
+            });
+        });
+
+        // Add styles for loading state
+        const style = document.createElement('style');
+        style.textContent = `
+            .message.loading {
+                opacity: 0.7;
+            }
+            .message.loading p {
+                display: inline-block;
+                animation: loading 1.5s infinite;
+            }
+            @keyframes loading {
+                0% { content: 'Thinking.'; }
+                33% { content: 'Thinking..'; }
+                66% { content: 'Thinking...'; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>

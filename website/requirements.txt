@@ -1,0 +1,7 @@
+flask==2.3.3
+flask-cors==4.0.0
+python-dotenv==1.0.0
+requests==2.31.0
+scikit-learn==1.4.0
+numpy==1.26.4
+google-generativeai==0.3.2 
