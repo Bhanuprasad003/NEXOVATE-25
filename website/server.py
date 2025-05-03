@@ -75,6 +75,15 @@ def how_it_works():
 def chatbot_page():
     return render_template('chatbot.html')
 
+# Routes for extension downloads
+@app.route('/download/chrome')
+def download_chrome():
+    return send_from_directory('static/downloads', 'phishblade.zip', as_attachment=True, download_name='phishblade-chrome.zip')
+
+@app.route('/download/edge')
+def download_edge():
+    return send_from_directory('static/downloads', 'phishblade.zip', as_attachment=True, download_name='phishblade-edge.zip')
+
 # API endpoint for chat
 @app.route('/chat', methods=['POST'])
 def chat():

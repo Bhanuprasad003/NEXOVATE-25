@@ -606,4 +606,25 @@ section {
     background: rgba(78, 205, 196, 0.2);
     border-color: rgba(78, 205, 196, 0.4);
     transform: translateY(-2px);
+}
+
+.browser-specific {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.browser-specific li {
+    margin: 5px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.browser-specific li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #007bff;
 } 

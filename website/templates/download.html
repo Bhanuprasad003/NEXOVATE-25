@@ -36,7 +36,7 @@
                 </div>
                 <h3>Chrome Extension</h3>
                 <p>Get PhishBlade for Google Chrome</p>
-                <a href="#" class="download-btn primary">
+                <a href="{{ url_for('download_chrome') }}" class="download-btn primary">
                     <i class='bx bxs-download'></i> Download for Chrome
                 </a>
                 <div class="requirements">
@@ -55,7 +55,7 @@
                 </div>
                 <h3>Edge Extension</h3>
                 <p>Get PhishBlade for Microsoft Edge</p>
-                <a href="#" class="download-btn primary">
+                <a href="{{ url_for('download_edge') }}" class="download-btn primary">
                     <i class='bx bxs-download'></i> Download for Edge
                 </a>
                 <div class="requirements">
@@ -76,22 +76,26 @@
             <div class="step-card">
                 <span class="step-number">1</span>
                 <h3>Download</h3>
-                <p>Click the download button for your browser</p>
+                <p>Click the download button for your browser and save the ZIP file</p>
             </div>
             <div class="step-card">
                 <span class="step-number">2</span>
-                <h3>Install</h3>
-                <p>Follow the browser's installation prompts</p>
+                <h3>Extract</h3>
+                <p>Extract the downloaded ZIP file to a folder on your computer</p>
             </div>
             <div class="step-card">
                 <span class="step-number">3</span>
-                <h3>Activate</h3>
-                <p>Enable PhishBlade in your browser settings</p>
+                <h3>Enable Developer Mode</h3>
+                <p>Open your browser's extension page and enable Developer mode</p>
+                <ul class="browser-specific">
+                    <li>Chrome: Go to chrome://extensions/</li>
+                    <li>Edge: Go to edge://extensions/</li>
+                </ul>
             </div>
             <div class="step-card">
                 <span class="step-number">4</span>
-                <h3>Protect</h3>
-                <p>Start browsing with confidence</p>
+                <h3>Load Extension</h3>
+                <p>Click "Load unpacked" and select the extracted folder</p>
             </div>
         </div>
     </section>
